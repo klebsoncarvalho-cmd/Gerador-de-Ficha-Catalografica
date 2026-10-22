@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Ficha Catalográfica - Sistema de Bibliotecas FMABC</title>
+    
+    <style>
+        :root {
+            --primary: #3f4d34;
+            --primary-hover: #2d3826;
+            --primary-light: #526345;
+            --sky-bg: #f0f9ff;
+            --sky-border: #bae6fd;
+            --sky-text: #0369a1;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--slate-100);
+            color: var(--slate-800);
+            line-height: 1.5;
+            padding-bottom: 3rem;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 1.5rem 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 4px solid #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        @media (min-width: 768px) {
+            .header-content {
+                flex-direction: row;
+            }
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icon {
+            background: #ffffff;
+            color: var(--primary);
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            main {
+                grid-template-columns: 7fr 5fr;
+            }
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid var(--slate-200);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--slate-100);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--slate-900);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-box {
+            background-color: var(--slate-50);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--slate-200);
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #0369a1;
+            margin-bottom: 0.75rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .grid-2 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(3, 1fr); }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 0.25rem;
+        }
+
+        label.label-regular {
+            font-weight: 500;
+            color: var(--slate-700);
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--slate-300);
+            border-radius: 0.375rem;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            background-color: #ffffff;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.15s, transform 0.1s;
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--slate-100);
+            color: var(--slate-700);
+            border: 1px solid var(--slate-300);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--slate-200);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .ficha-container {
+            border: 1.5px solid #000000 !important;
+            padding: 24px 28px;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #000;
+            background-color: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            border-radius: 2px;
+        }
+
+        .sticky-wrapper {
+            position: sticky;
+            top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #area-ficha, #area-ficha * {
+                visibility: visible;
+            }
+            #area-ficha {
+                position: absolute;
+                left: 50%;
+                bottom: 20mm;
+                top: auto;
+                transform: translateX(-50%);
+                box-shadow: none !important;
+                width: 160mm;
+            }
+            .ficha-container {
+                border: 1.5px solid #000000 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--slate-900);
+            color: #ffffff;
+            font-size: 0.8125rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            z-index: 50;
+        }
+
+        #toast.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .icon-svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            display: inline-block;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="no-print">
+        <div class="header-content">
+            <div class="header-title-box">
+                <div class="header-icon">
+                    <svg class="icon-svg" style="width:28px; height:28px;" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4l7 3.82 7-3.82v-4L12 17l-7-3.82z"/></svg>
+                </div>
+                <div>
+                    <h1 style="font-size: 1.5rem; font-weight: 700;">Gerador de Ficha Catalográfica</h1>
+                    <p style="font-size: 0.875rem; opacity: 0.9;">Biblioteca CADIP - Centro Universitário FMABC</p>
+                </div>
+            </div>
+            <div>
+                <button onclick="baixarRelatorioDOC()" class="btn" style="background-color: #ffffff; color: var(--primary); font-weight: 700; border: 1px solid #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    Baixar Relatório Técnico (.doc)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <section class="card no-print">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg class="icon-svg" style="fill:#0369a1;" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+                    Formulário de Entrada de Dados
+                </h2>
+                <span style="font-size: 0.75rem; color: var(--slate-600);">* Campos obrigatórios</span>
+            </div>
+
+            <form id="form-ficha" onsubmit="event.preventDefault();">
+                
+                <!-- 1. Dados do(s) Autor(es) -->
+                <div class="section-box">
+                    <div class="section-title">1. Dados do(s) Autor(es)</div>
+
+                    <div id="container-autores" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="linha-autor grid-2" style="align-items: flex-end;">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label>Nome do autor *</label>
+                                <input type="text" class="autor-nome" value="Stéphanie Olivieri" placeholder="Ex: Sueli Dantas" oninput="atualizarFicha()">
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label>Sobrenome do autor *</label>
+                                <input type="text" class="autor-sobrenome" value="Scarpa" placeholder="Ex: Rodrigues" oninput="atualizarFicha()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+                        <button type="button" onclick="adicionarAutor()" class="btn btn-primary">
+                            Adicionar Autor +
+                        </button>
+                        <button type="button" onclick="removerAutor()" id="btn-remover-autor" class="btn btn-secondary" disabled>
+                            Remover -
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">2. Dados da Publicação</div>
+                    <div class="form-group">
+                        <label class="label-regular">Título Principal do Trabalho * (primeira letra maiúscula, restante minúscula)</label>
+                        <textarea id="titulo" rows="2" required placeholder="Digite o título completo conforme padrão AACR2/ABNT" oninput="atualizarFicha()">A eficácia do treino proprioceptivo na redução da recorrência de entorses de tornozelo em atletas</textarea>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label class="label-regular">Subtítulo (em minúsculas)</label>
+                            <input type="text" id="subtitulo" value="uma revisão de literatura" placeholder="Ex: uma revisão sistemática" oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">Ano de Defesa *</label>
+                            <input type="text" id="ano" value="2026" required placeholder="Ex: 2026" oninput="atualizarFicha()">
+                        </div>
+                    </div>
+
+                    <div class="grid-4">
+                        <div class="form-group">
+                            <label class="label-regular">Local (Cidade - UF) *</label>
+                            <input type="text" id="cidade" value="Santo André, SP" required placeholder="Ex: Santos, SP" oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">Número de Folhas *</label>
+                            <input type="text" id="paginas" value="34" required placeholder="Ex: 58" oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">Ilustrações (opcional)</label>
+                            <input type="text" id="ilustracoes" value="" placeholder="Ex: il. color." oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">Dimensão (Altura) *</label>
+                            <input type="text" id="dimensao" value="31 cm" required placeholder="Ex: 31 cm" oninput="atualizarFicha()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">3. Vínculo Acadêmico e Orientação</div>
+                    
+                    <div class="form-group">
+                        <label>Tipo de trabalho: *</label>
+                        <select id="tipoDoc" required onchange="atualizarFicha()">
+                            <option value="Monografia (Trabalho de Conclusão de Curso)" selected>Monografia (Trabalho de Conclusão de Curso)</option>
+                            <option value="Dissertação (Mestrado)">Dissertação (Mestrado)</option>
+                            <option value="Tese (Doutorado)">Tese (Doutorado)</option>
+                            <option value="Apostila">Apostila</option>
+                        </select>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="label-regular">Modalidade / Nível *</label>
+                            <select id="modalidadeCurso" required onchange="atualizarFicha()">
+                                <option value="Pós-Graduação Lato Sensu" selected>Pós-Graduação Lato Sensu</option>
+                                <option value="Pós-Graduação Stricto Sensu">Pós-Graduação Stricto Sensu</option>
+                                <option value="Graduação">Graduação</option>
+                                <option value="">Personalizado / Nenhum</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">Nome do Curso *</label>
+                            <input type="text" id="curso" value="Fisioterapia Traumato-Ortopédica Esportiva" required oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">Instituição *</label>
+                            <input type="text" id="instituicao" value="Centro Universitário FMABC" required oninput="atualizarFicha()">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="label-regular">Orientador(a) *</label>
+                            <input type="text" id="orientador" value="Prof. Thales Henrique Fernandes de Souza" required oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">Coorientador(a) (opcional)</label>
+                            <input type="text" id="coorientador" value="" placeholder="Ex: Profª. Dra. Maria Silva" oninput="atualizarFicha()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title">4. Assuntos e Índices</div>
+                    <div class="form-group">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                            <label class="label-regular" style="margin:0;">Assuntos / Palavras-Chave (separados por ';') *</label>
+                            <a href="https://decs.bvsalud.org/" target="_blank" style="font-size: 0.75rem; color: #0369a1; text-decoration: none; font-weight: 600;">Consultar DeCS &rarr;</a>
+                        </div>
+                        <input type="text" id="assuntos" value="Fisioterapia; Reabilitação; Traumatismos em atletas; Traumatismos do tornozelo" required oninput="atualizarFicha()">
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                                <label class="label-regular" style="margin:0;">Cutter *</label>
+                                <button type="button" onclick="gerarECoberturaCutter()" style="background:none; border:none; color:#0369a1; font-size:0.75rem; font-weight:600; cursor:pointer;">Auto Gerar</button>
+                            </div>
+                            <input type="text" id="cutter" value="S286e" required oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">CDD (Classificação)</label>
+                            <input type="text" id="cdd" value="615.8" oninput="atualizarFicha()">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-regular">NLM (Medicina)</label>
+                            <input type="text" id="nlm" value="WB546" oninput="atualizarFicha()">
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </section>
+
+        <section style="display: flex; flex-direction: column; align-items: center;">
+            <div class="sticky-wrapper">
+                
+                <!-- Barra de Ações -->
+                <div class="card no-print" style="padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--slate-600);">
+                        Visualizador
+                    </span>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button onclick="copiarTexto()" class="btn btn-secondary">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                            Copiar Texto
+                        </button>
+                        <button onclick="window.print()" class="btn btn-secondary">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+                            Imprimir
+                        </button>
+                        <button onclick="baixarDOC()" class="btn btn-primary">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            Baixar Ficha Word (.doc)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MODELO ESTÁTICO DEFINITIVO DE DIAGRAMAÇÃO DA FICHA CATALOGRÁFICA (MANTER FIXO) -->
+                <div id="area-ficha" style="width: 100%; display: flex; justify-content: center;">
+                    <div class="ficha-container" id="ficha-box">
+                        <table style="width: 100%; border-collapse: collapse; border: none; font-family: Arial, sans-serif; font-size: 13px; color: #000; line-height: 1.4;">
+                            <tr>
+                                <!-- Coluna 1: Cutter (Notação de Autor) -->
+                                <td style="width: 60px; vertical-align: top; padding: 0; white-space: nowrap; font-size: 13px; border: none;">
+                                    <span id="out-cutter">S286e</span>
+                                </td>
+                                
+                                <!-- Coluna 2: Conteúdo Principal com Indentação Padrão ABNT/AACR2 -->
+                                <td style="vertical-align: top; padding: 0; font-size: 13px; border: none;">
+                                    <div id="out-autor" style="font-weight: normal; margin-bottom: 2px;">Scarpa, Stéphanie Olivieri</div>
+                                    
+                                    <div style="margin-left: 20px;">
+                                        <span id="out-titulo">A eficácia do treino proprioceptivo na redução da recorrência de entorses de tornozelo em atletas</span>
+                                        <span id="out-subtitulo"> : uma revisão de literatura</span>
+                                        <span> / </span>
+                                        <span id="out-autor-direto">Stéphanie Olivieri Scarpa</span>.
+                                        <span> -- </span>
+                                        <span id="out-cidade">Santo André, SP</span>,
+                                        <span id="out-ano">2026</span>.<br>
+                                        <span id="out-desc-fisica">34 f. : 31 cm.</span>
+                                    </div>
+
+                                    <div style="margin-left: 20px; margin-top: 14px;">
+                                        <span id="out-tipoDoc">Monografia (Trabalho de Conclusão de Curso)</span>
+                                        <span id="box-modalidade"> &ndash; <span id="out-modalidade">Pós-Graduação Lato Sensu</span></span> &ndash;
+                                        <span id="out-curso">Fisioterapia Traumato-Ortopédica Esportiva</span>,
+                                        <span id="out-instituicao">Centro Universitário FMABC</span>.
+                                    </div>
+
+                                    <div style="margin-left: 20px; margin-top: 14px;">
+                                        <span id="label-orientador">Orientador</span>: <span id="out-orientador">Prof. Thales Henrique Fernandes de Souza</span>.
+                                    </div>
+
+                                    <div id="box-coorientador" style="margin-left: 20px; margin-top: 4px; display: none;">
+                                        <span id="label-coorientador">Coorientador</span>: <span id="out-coorientador"></span>.
+                                    </div>
+
+                                    <div style="margin-top: 14px; word-break: break-word;" id="out-assuntos">
+                                        1. Fisioterapia. 2. Reabilitação. 3. Traumatismos em atletas. 4. Traumatismos do tornozelo. I. Título.
+                                    </div>
+
+                                    <div style="text-align: right; margin-top: 16px; font-size: 12px;" id="out-classificacao">
+                                        <div id="out-cdd">CDD: 615.8</div>
+                                        <div id="out-nlm">NLM: WB546</div>
+                                    </div>
+
+                                    <div id="out-nota-biblioteca" style="border-top: 1px solid #e5e5e5; margin-top: 14px; padding-top: 6px; font-size: 10px; color: #444; line-height: 1.3;">
+                                        Ficha catalográfica gerada automaticamente mediante os dados fornecidos pelo(a) autor(a).
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Box Informativo -->
+                <div class="no-print" style="background-color: var(--sky-bg); border: 1px solid var(--sky-border); color: var(--sky-text); padding: 1rem; border-radius: 0.5rem; font-size: 0.75rem;">
+                    <p style="font-weight: 700; margin-bottom: 0.25rem;">Autonomia Local Garantida</p>
+                    <p>Essa aplicação roda diretamente no dispositivo do usuário. Não possui nenhuma conexão externa e todos os dados permanecem salvos na sua máquina local.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast">
+        <svg class="icon-svg" style="fill:#4ade80;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <span id="toast-msg">Mensagem</span>
+    </div>
+
+    <script>
+        // Formatar Nome com Primeira Letra Maiúscula e conectivos em minúscula
+        function formatarNomeProprio(str) {
+            if (!str) return '';
+            const minusculas = ['de', 'da', 'do', 'das', 'dos', 'e'];
+            const palavras = str.trim().toLowerCase().split(/\s+/);
+            
+            return palavras.map((palavra, index) => {
+                if (!palavra) return '';
+                if (index > 0 && minusculas.includes(palavra)) {
+                    return palavra;
+                }
+                return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+            }).join(' ');
+        }
+
+        // Formatar Título e Subtítulo para Caixa Baixa (padrão AACR2/ABNT)
+        function formatarTituloAACR2(titulo) {
+            if (!titulo) return '';
+            const t = titulo.trim().toLowerCase();
+            return t.charAt(0).toUpperCase() + t.slice(1);
+        }
+
+        function formatarSubtituloAACR2(subtitulo) {
+            if (!subtitulo) return '';
+            return subtitulo.trim().toLowerCase();
+        }
+
+        const TABELA_CUTTER_MAP = {
+            'A': [['a', 111], ['ab', 112], ['ac', 113], ['ad', 114], ['af', 115], ['ag', 116], ['al', 117], ['albu', 118], ['albuquerque', 341], ['alc', 351], ['ale', 371], ['alf', 411], ['alm', 471], ['almeida', 447], ['alv', 531], ['alves', 531], ['am', 641], ['amaral', 485], ['an', 711], ['andrade', 553], ['ant', 627], ['ar', 658], ['araujo', 663], ['au', 921]],
+            'B': [['b', 111], ['ba', 111], ['bar', 112], ['barbosa', 228], ['barros', 277], ['be', 381], ['bi', 581], ['bo', 671], ['br', 791], ['branco', 816], ['brasil', 823], ['brito', 862]],
+            'C': [['c', 111], ['cab', 112], ['cabral', 117], ['cad', 115], ['cal', 141], ['cam', 172], ['camp', 186], ['campos', 198], ['can', 212], ['cap', 236], ['car', 257], ['card', 264], ['cardoso', 265], ['carl', 269], ['carm', 274], ['carneiro', 275], ['carp', 277], ['carr', 278], ['carv', 331], ['carvalho', 331], ['cas', 334], ['castro', 355], ['cat', 357], ['cav', 376], ['cavalcanti', 376], ['ch', 431], ['co', 652], ['coelho', 672], ['cor', 781], ['correia', 824], ['cos', 834], ['costa', 837], ['cruz', 957]],
+            'D': [['d', 111], ['da', 111], ['dam', 113], ['dantas', 192], ['de', 278], ['di', 541], ['dias', 541], ['do', 631], ['du', 811], ['duarte', 812]],
+            'E': [['e', 111], ['ed', 112], ['el', 113], ['en', 115], ['es', 741], ['ev', 921]],
+            'F': [['f', 111], ['fa', 111], ['faria', 224], ['farias', 224], ['fe', 291], ['fel', 312], ['fer', 381], ['fernandes', 363], ['ferreira', 383], ['fi', 441], ['figueiredo', 475], ['fl', 591], ['fo', 671], ['fonseca', 676], ['fr', 811], ['franca', 835], ['freitas', 866]],
+            'G': [['g', 111], ['ga', 111], ['garcia', 216], ['ge', 311], ['gi', 431], ['go', 571], ['gomes', 633], ['goncalves', 635], ['gr', 751], ['gu', 891], ['guedes', 924], ['guimaraes', 963]],
+            'H': [['h', 111], ['ha', 111], ['he', 461], ['hi', 631], ['ho', 781]],
+            'I': [['i', 111], ['im', 311], ['in', 611]],
+            'J': [['j', 111], ['ja', 111], ['je', 411], ['ji', 611], ['jo', 711], ['ju', 911]],
+            'K': [['k', 111], ['ka', 111], ['ke', 411], ['ki', 611], ['ko', 711]],
+            'L': [['l', 111], ['la', 111], ['le', 431], ['leite', 533], ['li', 691], ['lima', 732], ['lin', 735], ['lins', 735], ['lo', 791], ['lopes', 864], ['lourenco', 892], ['lu', 921]],
+            'M': [['m', 111], ['ma', 111], ['macedo', 141], ['machado', 149], ['magalhaes', 188], ['mar', 357], ['marques', 357], ['martins', 386], ['mat', 425], ['matos', 433], ['me', 481], ['mello', 527], ['melo', 527], ['men', 541], ['mendes', 538], ['mi', 611], ['miranda', 672], ['mo', 711], ['monteiro', 772], ['moraes', 827], ['morais', 827], ['moreira', 838], ['mota', 917], ['moura', 929], ['mu', 951]],
+            'N': [['n', 111], ['na', 111], ['nas', 251], ['nascimento', 246], ['ne', 361], ['neto', 469], ['neves', 518], ['no', 741], ['nogueira', 778], ['nu', 911], ['nunes', 972]],
+            'O': [['o', 111], ['ol', 471], ['oliveira', 48], ['or', 631], ['os', 811]],
+            'P': [['p', 111], ['pa', 111], ['paiva', 149], ['pas', 278], ['passos', 288], ['paula', 324], ['pe', 361], ['pedro', 372], ['peixoto', 379], ['per', 428], ['pereira', 436], ['perez', 438], ['pi', 571], ['pinheiro', 654], ['pinto', 659], ['po', 741], ['pr', 891], ['prado', 896]],
+            'Q': [['q', 111], ['qu', 111], ['queiroz', 351]],
+            'R': [['r', 111], ['ra', 111], ['ramos', 175], ['re', 281], ['reis', 375], ['remedios', 386], ['rh', 471], ['ri', 511], ['ribeiro', 484], ['ro', 631], ['rocha', 672], ['rod', 682], ['rodr', 696], ['rodrigues', 696], ['roma', 758], ['ros', 788], ['rosa', 788], ['ru', 811], ['ruiz', 934]],
+            'S': [['s', 111], ['sa', 111], ['sampaio', 192], ['san', 211], ['santana', 232], ['santos', 237], ['sca', 281], ['scap', 284], ['scar', 285], ['scarp', 286], ['scarpa', 286], ['se', 438], ['si', 561], ['sil', 581], ['silv', 586], ['silva', 586], ['so', 678], ['soa', 678], ['soares', 678], ['sou', 725], ['sousa', 725], ['souz', 729], ['souza', 729], ['su', 942]],
+            'T': [['t', 111], ['ta', 111], ['tavares', 231], ['te', 251], ['teixeira', 266], ['to', 631], ['torres', 693], ['tr', 811]],
+            'U': [['u', 111], ['ul', 391], ['un', 581]],
+            'V': [['v', 111], ['va', 111], ['val', 137], ['vale', 149], ['vasconcelos', 331], ['ve', 411], ['veiga', 426], ['vi', 611], ['viana', 614], ['vicente', 632], ['vieira', 658], ['viella', 659], ['vila', 695]],
+            'W': [['w', 111], ['wa', 111], ['we', 411], ['wi', 611]],
+            'X': [['x', 111], ['xa', 111], ['xavier', 311]],
+            'Y': [['y', 111]],
+            'Z': [['z', 111], ['za', 111]]
+        };
+
+        function calcularCodigoCutter(sobrenomeRaw, tituloRaw) {
+            const sobrenome = (sobrenomeRaw || '').trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            let titulo = (tituloRaw || '').trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if (!sobrenome) return 'A111a';
+
+            const letraAutor = sobrenome.charAt(0).toUpperCase();
+            let numCutter = 111;
+
+            if (TABELA_CUTTER_MAP[letraAutor]) {
+                const entradas = TABELA_CUTTER_MAP[letraAutor];
+                let melhorMatch = 0;
+                for (let i = 0; i < entradas.length; i++) {
+                    const prefixo = entradas[i][0];
+                    if (sobrenome.startsWith(prefixo)) {
+                        if (prefixo.length >= melhorMatch) {
+                            melhorMatch = prefixo.length;
+                            numCutter = entradas[i][1];
+                        }
+                    }
+                }
+            } else {
+                // Fallback de hashing suave se a letra inicial for rara
+                let sum = 0;
+                for (let i = 0; i < sobrenome.length; i++) {
+                    sum += sobrenome.charCodeAt(i);
+                }
+                numCutter = 100 + (sum % 800);
+            }
+
+            // Remover artigos iniciais em Português e Inglês para determinar a letra do título (marca de trabalho)
+            const artigos = ['a', 'o', 'as', 'os', 'um', 'uma', 'uns', 'umas', 'the', 'an', 'el', 'la', 'los', 'las', 'un', 'una'];
+            const palavras = titulo.toLowerCase().split(/\s+/);
+            
+            if (palavras.length > 1 && artigos.includes(palavras[0])) {
+                titulo = palavras.slice(1).join(' ');
+            }
+
+            let marcaTrabalho = 'a';
+            if (titulo.length > 0) {
+                const primeiraLetra = titulo.trim().charAt(0).toLowerCase();
+                if (/[a-z]/.test(primeiraLetra)) {
+                    marcaTrabalho = primeiraLetra;
+                }
+            }
+
+            return `${letraAutor}${numCutter}${marcaTrabalho}`;
+        }
+
+        function adicionarAutor() {
+            const container = document.getElementById('container-autores');
+            const novaLinha = document.createElement('div');
+            novaLinha.className = 'linha-autor grid-2';
+            novaLinha.style.alignItems = 'flex-end';
+            novaLinha.innerHTML = `
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Nome do autor *</label>
+                    <input type="text" class="autor-nome" placeholder="Ex: João" oninput="atualizarFicha()">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Sobrenome do autor *</label>
+                    <input type="text" class="autor-sobrenome" placeholder="Ex: Silva" oninput="atualizarFicha()">
+                </div>
+            `;
+            container.appendChild(novaLinha);
+            atualizarBotoesAutores();
+            atualizarFicha();
+        }
+
+        function removerAutor() {
+            const container = document.getElementById('container-autores');
+            const linhas = container.getElementsByClassName('linha-autor');
+            if (linhas.length > 1) {
+                container.removeChild(linhas[linhas.length - 1]);
+            }
+            atualizarBotoesAutores();
+            atualizarFicha();
+        }
+
+        function atualizarBotoesAutores() {
+            const linhas = document.querySelectorAll('.linha-autor');
+            const btnRemover = document.getElementById('btn-remover-autor');
+            if (linhas.length <= 1) {
+                btnRemover.disabled = true;
+            } else {
+                btnRemover.disabled = false;
+            }
+        }
+
+        function gerarECoberturaCutter() {
+            const sobrenomeEl = document.querySelector('.autor-sobrenome');
+            const sobrenome = sobrenomeEl ? sobrenomeEl.value : '';
+            const titulo = document.getElementById('titulo').value;
+            
+            const codigo = calcularCodigoCutter(sobrenome, titulo);
+            document.getElementById('cutter').value = codigo;
+            atualizarFicha();
+            mostrarToast(`Cutter auto-gerado com sucesso: ${codigo}`);
+        }
+
+        function atualizarFicha() {
+            // Autores
+            const nomes = document.querySelectorAll('.autor-nome');
+            const sobrenomes = document.querySelectorAll('.autor-sobrenome');
+            
+            let listaAutoresEntrada = [];
+            let listaAutoresDiretos = [];
+
+            for (let i = 0; i < nomes.length; i++) {
+                const n = formatarNomeProprio(nomes[i].value.trim());
+                const s = formatarNomeProprio(sobrenomes[i].value.trim());
+                if (n || s) {
+                    if (s && n) {
+                        listaAutoresEntrada.push(`${s}, ${n}`);
+                        listaAutoresDiretos.push(`${n} ${s}`);
+                    } else if (s) {
+                        listaAutoresEntrada.push(s);
+                        listaAutoresDiretos.push(s);
+                    } else {
+                        listaAutoresEntrada.push(n);
+                        listaAutoresDiretos.push(n);
+                    }
+                }
+            }
+
+            const autorEntradaText = listaAutoresEntrada.length > 0 ? listaAutoresEntrada[0] : 'Sobrenome, Nome';
+            const autorDiretoText = listaAutoresDiretos.length > 0 ? listaAutoresDiretos.join('; ') : 'Nome Sobrenome';
+
+            document.getElementById('out-autor').innerText = autorEntradaText;
+            document.getElementById('out-autor-direto').innerText = autorDiretoText;
+
+            // Título e Subtítulo
+            const rawTitulo = document.getElementById('titulo').value;
+            const rawSubtitulo = document.getElementById('subtitulo').value;
+
+            document.getElementById('out-titulo').innerText = formatarTituloAACR2(rawTitulo);
+            
+            if (rawSubtitulo.trim()) {
+                document.getElementById('out-subtitulo').innerText = ' : ' + formatarSubtituloAACR2(rawSubtitulo);
+            } else {
+                document.getElementById('out-subtitulo').innerText = '';
+            }
+
+            // Publicação
+            document.getElementById('out-cidade').innerText = document.getElementById('cidade').value || 'Cidade';
+            document.getElementById('out-ano').innerText = document.getElementById('ano').value || 'Ano';
+
+            // Descrição Física
+            const paginas = document.getElementById('paginas').value || '0';
+            const il = document.getElementById('ilustracoes').value.trim();
+            const dimensao = document.getElementById('dimensao').value || '31 cm';
+
+            let descFisica = `${paginas} f.`;
+            if (il) {
+                descFisica += ` : ${il}`;
+            }
+            descFisica += ` ; ${dimensao}.`;
+            document.getElementById('out-desc-fisica').innerText = descFisica;
+
+            // Vínculo Acadêmico
+            document.getElementById('out-tipoDoc').innerText = document.getElementById('tipoDoc').value;
+
+            const modalidadeVal = document.getElementById('modalidadeCurso').value.trim();
+            const boxModalidade = document.getElementById('box-modalidade');
+            if (modalidadeVal) {
+                document.getElementById('out-modalidade').innerText = modalidadeVal;
+                boxModalidade.style.display = 'inline';
+            } else {
+                boxModalidade.style.display = 'none';
+            }
+
+            document.getElementById('out-curso').innerText = document.getElementById('curso').value || 'Curso';
+            document.getElementById('out-instituicao').innerText = document.getElementById('instituicao').value || 'Instituição';
+
+            // Orientador e Coorientador
+            document.getElementById('out-orientador').innerText = document.getElementById('orientador').value || 'Nome do Orientador';
+            
+            const coorientadorVal = document.getElementById('coorientador').value.trim();
+            const boxCoorientador = document.getElementById('box-coorientador');
+            if (coorientadorVal) {
+                document.getElementById('out-coorientador').innerText = coorientadorVal;
+                boxCoorientador.style.display = 'block';
+            } else {
+                boxCoorientador.style.display = 'none';
+            }
+
+            // Assuntos / Palavras-chave
+            const assuntosRaw = document.getElementById('assuntos').value;
+            const listaAssuntos = assuntosRaw.split(';').map(s => s.trim()).filter(s => s.length > 0);
+            
+            let assuntosFormatted = '';
+            listaAssuntos.forEach((assunto, index) => {
+                const assuntoFormated = assunto.charAt(0).toUpperCase() + assunto.slice(1);
+                assuntosFormatted += `${index + 1}. ${assuntoFormated}. `;
+            });
+
+            // Entradas Secundárias (Autores secundários e Título)
+            let indexEntradaSecundarias = listaAssuntos.length + 1;
+            
+            if (listaAutoresEntrada.length > 1) {
+                for (let k = 1; k < listaAutoresEntrada.length; k++) {
+                    const numRomano = toRoman(k);
+                    assuntosFormatted += `${numRomano}. ${listaAutoresEntrada[k]}. `;
+                }
+                const romanTitle = toRoman(listaAutoresEntrada.length);
+                assuntosFormatted += `${romanTitle}. Título.`;
+            } else {
+                assuntosFormatted += `I. Título.`;
+            }
+
+            document.getElementById('out-assuntos').innerText = assuntosFormatted;
+
+            // Cutter e Classificações
+            document.getElementById('out-cutter').innerText = document.getElementById('cutter').value || 'Cutter';
+            
+            const cddVal = document.getElementById('cdd').value.trim();
+            const nlmVal = document.getElementById('nlm').value.trim();
+
+            const outCdd = document.getElementById('out-cdd');
+            const outNlm = document.getElementById('out-nlm');
+
+            if (cddVal) {
+                outCdd.innerText = `CDD: ${cddVal}`;
+                outCdd.style.display = 'block';
+            } else {
+                outCdd.style.display = 'none';
+            }
+
+            if (nlmVal) {
+                outNlm.innerText = `NLM: ${nlmVal}`;
+                outNlm.style.display = 'block';
+            } else {
+                outNlm.style.display = 'none';
+            }
+        }
+
+        function toRoman(num) {
+            const lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1};
+            let roman = '', i;
+            for ( i in lookup ) {
+                while ( num >= lookup[i] ) {
+                    roman += i;
+                    num -= lookup[i];
+                }
+            }
+            return roman;
+        }
+
+        function copiarTexto() {
+            const cutter = document.getElementById('out-cutter').innerText;
+            const autor = document.getElementById('out-autor').innerText;
+            const titulo = document.getElementById('out-titulo').innerText;
+            const subtitulo = document.getElementById('out-subtitulo').innerText;
+            const autorDireto = document.getElementById('out-autor-direto').innerText;
+            const cidade = document.getElementById('out-cidade').innerText;
+            const ano = document.getElementById('out-ano').innerText;
+            const descFisica = document.getElementById('out-desc-fisica').innerText;
+            const tipoDoc = document.getElementById('out-tipoDoc').innerText;
+            const modalidade = document.getElementById('out-modalidade').innerText;
+            const hasModalidade = document.getElementById('box-modalidade').style.display !== 'none' && modalidade;
+            const curso = document.getElementById('out-curso').innerText;
+            const inst = document.getElementById('out-instituicao').innerText;
+            const orientador = document.getElementById('out-orientador').innerText;
+            const coorientador = document.getElementById('out-coorientador').innerText;
+            const assuntos = document.getElementById('out-assuntos').innerText;
+            const cdd = document.getElementById('out-cdd').innerText;
+            const nlm = document.getElementById('out-nlm').innerText;
+
+            let textoCopiar = `${cutter}\t${autor}\n`;
+            textoCopiar += `\t${titulo}${subtitulo} / ${autorDireto}. -- ${cidade}, ${ano}.\n`;
+            textoCopiar += `\t${descFisica}\n\n`;
+            if (hasModalidade) {
+                textoCopiar += `\t${tipoDoc} -- ${modalidade} -- ${curso}, ${inst}.\n`;
+            } else {
+                textoCopiar += `\t${tipoDoc} -- ${curso}, ${inst}.\n`;
+            }
+            textoCopiar += `\tOrientador: ${orientador}.\n`;
+            if (coorientador) {
+                textoCopiar += `\tCoorientador: ${coorientador}.\n`;
+            }
+            textoCopiar += `\n\t${assuntos}\n\n`;
+            if (cdd) textoCopiar += `\t${cdd}\n`;
+            if (nlm) textoCopiar += `\t${nlm}\n`;
+
+            const el = document.createElement('textarea');
+            el.value = textoCopiar;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            mostrarToast('Ficha em texto copiada para a área de transferência!');
+        }
+
+        function baixarDOC() {
+            const contenido = document.getElementById('area-ficha').innerHTML;
+            
+            const headerHTML = `<html xmlns:o='urn:schemas-microsoft-microsoft-com:office:office' 
+                xmlns:w='urn:schemas-microsoft-microsoft-com:office:word' 
+                xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>Ficha Catalográfica</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    .ficha-container {
+                        border: 1.5pt solid #000000 !important;
+                        padding: 18pt;
+                        width: 140mm;
+                        margin: 0 auto;
+                        font-size: 10pt;
+                    }
+                    table { border-collapse: collapse; width: 100%; }
+                    td { vertical-align: top; font-size: 10pt; }
+                </style>
+                </head><body>`;
+            
+            const footerHTML = "</body></html>";
+            const sourceHTML = headerHTML + contenido + footerHTML;
+            
+            const blob = new Blob(['\ufeff' + sourceHTML], {
+                type: 'application/msword;charset=utf-8'
+            });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Ficha_Catalografica_FMABC.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            mostrarToast('Download do arquivo Word (.doc) iniciado!');
+        }
+
+        function baixarRelatorioDOC() {
+            const autor = document.getElementById('out-autor').innerText;
+            const titulo = document.getElementById('out-titulo').innerText;
+            const modalidade = document.getElementById('out-modalidade').innerText;
+            const hasModalidade = document.getElementById('box-modalidade').style.display !== 'none' && modalidade;
+            const curso = document.getElementById('out-curso').innerText;
+            const inst = document.getElementById('out-instituicao').innerText;
+            const cutter = document.getElementById('out-cutter').innerText;
+
+            const cursoModalidadeStr = hasModalidade ? `${curso} (${modalidade})` : curso;
+
+            const relatorioHTML = `<html xmlns:o='urn:schemas-microsoft-microsoft-com:office:office' 
+                xmlns:w='urn:schemas-microsoft-microsoft-com:office:word' 
+                xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>Relatório Técnico de Catalogação</title>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; padding: 2cm; }
+                    h1 { color: #3f4d34; font-size: 18pt; border-bottom: 2px solid #3f4d34; padding-bottom: 6px; }
+                    h2 { color: #0369a1; font-size: 14pt; margin-top: 18pt; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 12pt; }
+                    th, td { border: 1px solid #ccc; padding: 8pt; text-align: left; font-size: 10pt; }
+                    th { background-color: #f1f5f9; }
+                </style>
+                </head>
+                <body>
+                    <h1>Relatório Técnico de Catalogação Bibliográfica</h1>
+                    <p><strong>Biblioteca CADIP - Centro Universitário FMABC</strong></p>
+                    <hr>
+                    <h2>1. Identificação do Documento</h2>
+                    <table>
+                        <tr><th>Autor Principal:</th><td>${autor}</td></tr>
+                        <tr><th>Título:</th><td>${titulo}</td></tr>
+                        <tr><th>Curso / Programa:</th><td>${cursoModalidadeStr}</td></tr>
+                        <tr><th>Instituição:</th><td>${inst}</td></tr>
+                        <tr><th>Cultura/Cutter:</th><td>${cutter}</td></tr>
+                        <tr><th>Data de Emissão:</th><td>${new Date().toLocaleDateString('pt-BR')}</td></tr>
+                    </table>
+
+                    <h2>2. Conformidade Normativa</h2>
+                    <p>A ficha catalográfica gerada atende às diretrizes vigentes das seguintes normas internacionais e nacionais de documentação:</p>
+                    <ul>
+                        <li><strong>AACR2</strong> (Anglo-American Cataloguing Rules, 2nd edition) - Regras de descrição técnica e escolha de pontos de acesso.</li>
+                        <li><strong>ABNT NBR 6023</strong> - Informação e documentação: Referências - Elaboração.</li>
+                        <li><strong>ABNT NBR 14724</strong> - Informação e documentação: Trabalhos acadêmicos - Apresentação.</li>
+                        <li><strong>Tabela Cutter-Sanborn</strong> - Atribuição de notação de autor e marca de trabalho.</li>
+                    </ul>
+
+                    <h2>3. Instruções para Inserção no Trabalho Acadêmico</h2>
+                    <p>A ficha catalográfica deve ser posicionada no verso da folha de rosto do trabalho final (Monografia, Dissertação ou Tese), centralizada na metade inferior da página.</p>
+                </body>
+                </html>`;
+
+            const blob = new Blob(['\ufeff' + relatorioHTML], {
+                type: 'application/msword;charset=utf-8'
+            });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Relatorio_Tecnico_Catalogacao_FMABC.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            mostrarToast('Relatório Técnico (.doc) gerado com sucesso!');
+        }
+
+        function mostrarToast(mensagem) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.innerText = mensagem;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        window.onload = function() {
+            atualizarFicha();
+        };
+    </script>
+</body>
+</html>
